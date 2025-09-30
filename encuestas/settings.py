@@ -1,20 +1,31 @@
+
 from pathlib import Path
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', "")
 
-DEBUG = True
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
+
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 INSTALLED_APPS = [
-    "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
-    "django.contrib.sessions", "django.contrib.messages", "django.contrib.staticfiles",
-    "core", "organizacion", "encuestas_app", "incidencias", "territorial_app",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "core",
+    "organizacion",
+    "encuestas_app",
+    "incidencias",
+    "territorial_app",
     "registration",
+    "personas",
 ]
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -28,30 +39,33 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "encuestas.urls"
 
-TEMPLATES = [{
-    "BACKEND": "django.template.backends.django.DjangoTemplates",
-    "DIRS": [BASE_DIR / "templates"],
-    "APP_DIRS": True,
-    "OPTIONS": {
-        "context_processors": [
-            "django.template.context_processors.debug",
-            "django.template.context_processors.request",
-            "django.contrib.auth.context_processors.auth",
-            "django.contrib.messages.context_processors.messages",
-        ],
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
     },
-}]
+]
 
 WSGI_APPLICATION = "encuestas.wsgi.application"
+
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get('DB_NAME', ""),
         "USER": os.environ.get('DB_USER', ""),
-        "PASSWORD": os.environ.get('DB_PASSWORD', ""),
-        "HOST": "localhost",
-        "PORT": "5432",
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
         "CONN_MAX_AGE": 60,
         "CONN_HEALTH_CHECKS": True,
     }
@@ -75,8 +89,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/personas/check_profile/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
+
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
