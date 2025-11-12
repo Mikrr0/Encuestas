@@ -93,6 +93,20 @@ LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/personas/check_profile/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+MAX_UPLOAD_SIZE = 300 * 1024 * 1024  # 300 MB de límite de tamaño de archivo
+
+ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/mpeg', 'video/quicktime', 'video/x-msvideo']
+ALLOWED_AUDIO_TYPES = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4']
+ALLOWED_DOCUMENT_TYPES = [
+    'application/pdf', 
+    'application/msword', 
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+]
+
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 DEFAULT_FROM_EMAIL = "Sistema Municipal <no-reply@municipalidad.local>"#cambio barbara
