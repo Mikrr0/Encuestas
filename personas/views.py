@@ -238,7 +238,7 @@ def usuarios_lista(request):
         "rol_seleccionado": rol_seleccionado,
     }
 
-    return render(request, "personas/usuarios_lista.html", ctx)
+    return redirect("core:usuarios_lista")
 
 @login_required
 @solo_admin
