@@ -38,6 +38,8 @@ conda activate encuestas_env
 # Instalar dependencias
 pip install -r requirements.txt
 
+# Antes de migrar, configurar las variables de entorno (ver sección inferior)
+
 # Migrar la base de datos
 python manage.py migrate
 
@@ -46,3 +48,22 @@ python manage.py createsuperuser
 
 # Ejecutar servidor de desarrollo
 python manage.py runserver
+```
+
+## Configuración de credenciales
+
+Las credenciales no deben guardarse en Git. Configura las siguientes variables de entorno antes de iniciar Django. Ejemplo para PowerShell (Windows):
+
+```powershell
+$env:DJANGO_SECRET_KEY = (python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())")
+$env:DB_NAME = Read-Host 'Nombre de la base PostgreSQL'
+$env:DB_USER = Read-Host 'Usuario PostgreSQL'
+$env:DB_PASSWORD = [System.Net.NetworkCredential]::new('', (Read-Host 'Contraseña PostgreSQL' -AsSecureString)).Password
+$env:DB_HOST = 'localhost'
+$env:DB_PORT = '5432'
+$env:DJANGO_DEBUG = 'True'
+```
+
+Utiliza una clave Django nueva y estable por instalación, almacenada fuera del repositorio. El ejemplo genera una clave para desarrollo; no la regeneres en cada inicio de una instalación persistente. Las variables de PowerShell son válidas para la sesión actual. En producción establece `DJANGO_DEBUG=False` y configura `DJANGO_ALLOWED_HOSTS`.
+
+La rama principal utiliza el backend de correo de consola. Las ramas que utilizan SMTP requieren además `EMAIL_HOST_USER` y `EMAIL_HOST_PASSWORD`; pueden configurar `EMAIL_BACKEND` y `DEFAULT_FROM_EMAIL` de forma opcional. No guardes valores reales en el código ni en el README. Los archivos `.env` están excluidos de Git y no se cargan automáticamente.
